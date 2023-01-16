@@ -1,4 +1,7 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using MiddlewareExample.CustomMiddleware; 
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddTransient<MyCustomMiddleware>(); 
 var app = builder.Build();
 
 // Middleware 1
@@ -9,9 +12,12 @@ app.Use(async (HttpContext context, RequestDelegate next) =>
 });
 
 // Middleware 2
+app.UseMyCustomMiddleware(); 
+
+// Middleware 3
 app.Run(async (HttpContext context) =>
 {
-    await context.Response.WriteAsync("World");
+    await context.Response.WriteAsync("World\n");
 });
 
 app.Run();
